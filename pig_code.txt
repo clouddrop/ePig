@@ -1,0 +1,18 @@
+#pig demographics
+
+a = load '../my-examples/Demographic_Statistics_By_Zip_Code.csv' using PigStorage(',') as (JURISDICTION:chararray , COUNT:int , PARTICIPANTS:int);
+
+#create a bag
+b = foreach a generate {[JURISDICTION, count]}, {JURISDICTION, PARTICIPANTS};
+
+
+dump a
+
+--to understand group
+grouped_records = GROUP a BY PARTICIPANTS;
+filter the group
+filter_group = FOREACH grouped_records GENERATE group ,  AVG(a.COUNT) as average ;
+
+
+
+run on cluster
